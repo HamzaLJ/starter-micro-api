@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
-const cheerio = require('cheerio');
-const http = require('http');
+import fetch from 'node-fetch';
+import cheerio from 'cheerio';
+import http from 'http';
 
 async function parseData() {
   // Fetch data from the Investing.com website
@@ -38,5 +38,10 @@ async function parseData() {
   return data;
 }
 
-// Call the function to parse the data
-parseData().then(data => console.log(data));
+
+http.createServer(function (req, res) {
+  console.log(`Just got a request at ${req.url}!`)
+  const parseData = parseData().then(data => data);
+  res.write('parseData >> ', parseData);
+  res.end();
+}).listen(process.env.PORT || 3000);
